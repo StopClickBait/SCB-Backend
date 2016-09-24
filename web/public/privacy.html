@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <title>Save A Click</title>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+    <!-- CSS Reset -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+
+    <!-- Milligram CSS minified -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css">
+
+    <style>
+      body {
+        background-color: #efefef;
+      }
+      body > .container {
+        padding-top: 2em;
+      }
+      #img-main-logo {
+        height: 4em;
+      }
+      /*#btn-privacy-policy {
+        margin-top: 1em;
+      }*/
+      table.clickbait-explanations tr {
+        background-color: #fff;
+        -webkit-box-shadow: 0px 6px 8px 1px rgba(105,105,105,1);
+        -moz-box-shadow: 0px 6px 8px 1px rgba(105,105,105,1);
+        box-shadow: 0px 6px 8px 1px rgba(105,105,105,1);
+      }
+      table.clickbait-explanations tr td:first-child {
+        padding-left: 1.2em;
+      }
+      .img-num-votes {
+        height: 2em;
+      }
+      .td-num-votes {
+        width: 2em;
+        text-align: center;
+      }
+      #explanation-form {
+        background-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="clearfix">
+        <div class="float-left">
+          <!--<img id="img-main-logo" src="/public/logo.png" />-->
+          <h2><strong>#STOPCLICKBAIT</strong></h2>
+        </div>
+        <!--<div class="float-right">
+
+          <a href="/public/privacy.html" id="btn-privacy-policy" class="button">Privacy Policy</a>
+        </div>-->
+      </div>
+    </div>
+    
+    <div class="container">
+      <h1>Privacy Policy</h1>
+      <p>This app does not gather ANY data from your facebook account or any other personal data.</p>
+      <p>When you click on the Open button, you will be taken to a page which will require you to authenticate with Google 
+        before you can add your explanations and upvote other explanations. The app uses this to avoid spam and stores no data from your 
+        Google account on its own servers. Only a profile ID which is specific to this app only, is stored per-user.
+      </p>
+    </div>
+
+    <div class="container">
+      <center><a href="/public/privacy.html" id="btn-privacy-policy">Privacy Policy</a></center>
+    </div>
+  </body>
+</html>

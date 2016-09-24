@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <title>Save A Click</title>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+    <!-- CSS Reset -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+
+    <!-- Milligram CSS minified -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css">
+
+    <style>
+      body {
+        background-color: #efefef;
+      }
+      body > .container {
+        padding-top: 2em;
+      }
+      #img-main-logo {
+        height: 4em;
+      }
+      /*#btn-privacy-policy {
+        margin-top: 1em;
+      }*/
+      table.clickbait-explanations tr {
+        background-color: #fff;
+        -webkit-box-shadow: 0px 6px 8px 1px rgba(105,105,105,1);
+        -moz-box-shadow: 0px 6px 8px 1px rgba(105,105,105,1);
+        box-shadow: 0px 6px 8px 1px rgba(105,105,105,1);
+      }
+      table.clickbait-explanations tr td:first-child {
+        padding-left: 1.2em;
+      }
+      .img-num-votes {
+        height: 2em;
+      }
+      .td-num-votes {
+        width: 2em;
+        text-align: center;
+      }
+      #explanation-form {
+        background-color: #fff;
+      }
+      .no-margin {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="clearfix">
+        <div class="float-left">
+          <!--<img id="img-main-logo" src="/public/logo.png" />-->
+          <h2><strong>#STOPCLICKBAIT</strong></h2>
+        </div>
+        <!--<div class="float-right">
+
+          <a href="/public/privacy.html" id="btn-privacy-policy" class="button">Privacy Policy</a>
+        </div>-->
+      </div>
+    </div>
+    <div class="container">
+      <h3>Submit Explanation</h3>
+      <h5><a href="{{decodedBaitUrl}}" id="bait_url">{{decodedBaitUrl}}</a></h5>
+      <div>
+        <form action="/answers?url={{baitUrl}}" method="POST">
+          <input id="explanation-form" placeholder="Keep it short and sweet" type="text" name="answer">
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+      <div>
+        {{#if clickbait}}
+          <h3>Available explanations</h3>
+          <table class="clickbait-explanations">
+            <tbody id="bait_answers">
+              {{#each clickbait.answers}}
+              <tr>
+                <td class="td-num-votes">
+                  <span>
+                    <form class="no-margin" action="/answers/{{id}}/votes?url={{../baitUrl}}" method="POST">
+                      <input class="img-num-votes" src="/public/thumbs-up-icon.png" type="image" />
+                    </form>
+                    <!--<img class="img-num-votes" src="/public/thumbs-up-icon.png" alt="">-->
+                  </span>
+                  <div>
+                    <strong>{{this.numVotes}}</strong>
+                  </div>
+                </td>
+                <td>
+                  {{this.answer}}
+                </td>
+                <!--<td width="200px">
+                  <form action="/answers/{{id}}/votes?url={{../baitUrl}}" method="POST">
+                    <button type="submit">({{this.numVotes}}) Thumbs Up!</button>
+                  </form>
+                </td>-->
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        {{else}}
+          <div>
+            <h3>No explanations to show... yet. Why not add one above?</h3>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+    <div class="container">
+      <center><a href="/public/privacy.html" id="btn-privacy-policy">Privacy Policy</a></center>
+    </div>
+  </body>
+</html>

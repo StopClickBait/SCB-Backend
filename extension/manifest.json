@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "Stop Clickbait",
+  "version": "1.2.3",
+  "description": "Provides explanations to clickbaity articles on Facebook so you don't waste clicks on them.",
+  "permissions": [
+    "*://saveaclick.herokuapp.com/*"
+  ],
+  "icons": {
+    "48": "icons/logo-48.png",
+    "96": "icons/logo-96.png"
+  },
+  "author": "Arsalan Ahmad <arsalanahmad.ars@gmail.com>",
+  "applications": {
+    "gecko": {
+      "id": "saveaclick@arsalan.me",
+      "strict_min_version": "45.0"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.facebook.com/*"],
+      "js": ["picoModal-2.3.0.min.js", "borderify.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["fetcher.js"] 
+  }
+}
