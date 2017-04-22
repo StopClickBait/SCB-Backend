@@ -1,6 +1,6 @@
-'use strict';
+//'use strict';
 
-const knex = require('knex')({
+/*const knex = require('knex')({
   client: 'pg',
   connection: {
     host     : process.env.DB_HOST,
@@ -11,36 +11,125 @@ const knex = require('knex')({
   },
 });
 
-module.exports = knex; 
+module.exports = knex; */
+
+// Laravel Connection Parameters
+/*'mysql' => array(
+    'read' => array(
+        'host' => DB_HOST,
+    ),
+    'write' => array(
+        'host' => 
+    ),
+    'driver'    => 'mysql',
+    'database'  => 'database',
+    'username'  => 'root',
+    'password'  => '',
+    'charset'   => 'utf8',
+    'collation' => 'utf8_unicode_ci',
+    'prefix'    => '',
+),*/
 
 //building the database
 //articles
-knex.schema.createTableIfNotExists('articles', function (table) {
-    table.increments();
-    table.string('articleID');
-    table.string('name');
-    table.string('userID');     // author
-    table.int('userVotes');
-})
+if (!(Schema::hasTable('articles'))) {    
+    Schema::create('articles', function($table) {
+        $table->increments('id')->unsigned();
+        $table->string('nameURI');
+        $table->boolean('isDeleted');
+        $table->foreign('userID')
+            ->references('id')
+            ->on('users');
+    //table->integer->unsigned('tagID')
+    //table->integer->unsigned('userVotes');
+    })
+}
+
+//User Articles
+if (!(Schema::hasTable('UserArticles'))) {
+    Schema::create('UserArticles', function($table) {
+        $table->increments('id')->unsigned();
+        $table->foreign('articleID')
+            ->references('id')
+            ->on('articles');
+        $table->foreign('userID')
+            ->references('id')
+            ->on('users');
+    })
+}
 
 //users
-knex.schema.createTableIfNotExists('users', function (table) {
-    table.increments();
-    table.string('userID');
-    // will return to this later for other items
-})
+if (!(Schema::hasTable('users'))) {}
+    Schema::create('users', function($table) {
+        $table->increments('id')->unsigned();
+        $table->string('nameURI');
+        $table->string('authType');   // not sure yet if this will relate to perms or what
+        $table->dateTime('createdDate');
+        $table->dateTime('modifiedDate');
+        $table->boolean('isActive');
+    })
+}
 
 //roles
-knex.schema.createTableIfNotExists('roles', function (table) {
-    table.increments();
-    table.string('roleID');
-    table.string('userID');
+if (!(Schema::hasTable('roles'))) {
+    Schema::create('roles', function($table) {
+        $table->increments('id')->unsigned();
+        $table->string('nameURI');
+        $table->boolean('isDefault');
+        $table->dateTime('createdDate');
+        $table->dateTime('modifiedDate');
+    })
+}
+
+//Role Permissions (relates roles and their permissions)
+if (!(Schema::hasTable('RolePerms'))) {
+    Schema::create('RolePerms', function($table) {
+        $table->increments('id')->unsigned();
+        $table->foreign('roleID')
+            ->references('id')
+            ->on('roles');
+        $table->foreign('permID')
+            ->references('id')
+            ->on('perms');
+    })
+}
+
+//perms
+if (!(Schema::hasTable('perms'))) {
+    Schema::create('perms', function($table) {
+        $table->increments('id')->unsigned();
+        $table->string('nameURI');
+        $table->dateTime('createdDate');
+        $table->dateTime('modifiedDate');
+    })
 }
 
 //tags/categories
-knex.schema.createTableIfNotExists('tags', function (table) {
-    table.increments();
-    table.string('categoryName');
-    table.string('articleID');
-    // will come back to this later for other items
-})
+if (!(Schema::hasTable('tags'))) {
+    Schema::create('tags', function($table) {
+        $table->increments('id')->unsigned();
+        $table->string('categoryName');
+        $table->foreign('articleID')
+            ->references('id')
+            ->on('articles');
+        $table->foreign('userID')
+            ->references('id')
+            ->on('users');
+    })
+}
+
+//Article Tags (relation of articles and tags)
+if (!(Schema::hasTable('ArticleTags'))) {
+    Schema::create('ArticleTags', function($table) {
+        $table->increments('id')->unsigned();
+        $table->foreign('tagID')
+            ->references('id')
+            ->on('tags');
+        $table->foreign('articleID')
+            ->references('id')
+            ->on('articles');
+        $table->foreign('userID')
+            ->references('id')
+            ->on('users');          
+    })
+}
