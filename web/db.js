@@ -1,34 +1,13 @@
-//'use strict';
-
-/*const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host     : process.env.DB_HOST,
-    user     : process.env.DB_USER  ,
-    password : process.env.DB_PASSWORD,
-    database : process.env.DB_DATABASE,
-    ssl: true
-  },
-});
-
-module.exports = knex; */
-
 // Laravel Connection Parameters
-/*'mysql' => array(
-    'read' => array(
-        'host' => DB_HOST,
-    ),
-    'write' => array(
-        'host' => 
-    ),
-    'driver'    => 'mysql',
-    'database'  => 'database',
-    'username'  => 'root',
-    'password'  => '',
-    'charset'   => 'utf8',
-    'collation' => 'utf8_unicode_ci',
-    'prefix'    => '',
-),*/
+'sqlsrv' => [
+    'driver' => 'sqlsrv',
+    'host' => env('DB_HOST', 'localhost'),
+    'database' => env('DB_DATABASE', 'forge'),
+    'username' => env('DB_USERNAME', 'forge'),
+    'password' => env('DB_PASSWORD', ''),
+    'charset' => 'utf8',
+    'prefix' => '',
+],
 
 //building the database
 //articles
