@@ -29,22 +29,7 @@ Route::get('/answers/{answerId}/votes', function ($answerId) {
     return json_encode($votes); 
 });
 
-Route::get('/articles/', function () {
-   $articles = array ('articles.com/articles/1', 'articles.com/articles/5', 'articles.com/articles/123', 'articles.com/articles/4000');
-	
-    return json_encode($articles); 
-});
-
-Route::post('/article', function(Request $request){
-	$answer = $request->input('answer');
-	$answerId = $request->input('articleId');
-	$userId = $request->input('userId');
-	
-	// Create article
-	// Add answer to db
-	
-	return 'thanks';
-});
+Route::resource('articles', 'ArticleController');
 
 Route::post('/vote', function(Request $request){
 	$answer = $request->input('answerId');
