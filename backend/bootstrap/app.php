@@ -16,6 +16,14 @@ $app = new Illuminate\Foundation\Application(
 );
 
 /*
+	Let's change where Laravel keeps it's storage and environment stuff, since
+	it's bad practice to keep it with the code.
+*/
+
+$app->useStoragePath('/var/laravel');
+$app->useEnvironmentPath('/etc/laravel/');
+
+/*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
 |--------------------------------------------------------------------------
