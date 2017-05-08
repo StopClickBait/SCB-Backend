@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Article;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,7 +25,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::all();
+        $articles = Article::where('isDeleted', 0)
+			->get();
 		return $articles;
     }
 
@@ -49,12 +51,21 @@ class ArticleController extends Controller
     {
         $article = new Article();
 		
-		$article->nameURI = $request['nameURI'];
-		$article->isDeleted = 0;
-		$article->userID = $request['userID'];
-		
-		if($article->save()){
-			return $article->id;
+		$existingArticle = DB::table('articles')
+			->where('nameURI', $request['nameURI'])
+			->where('isDeleted',0)
+			->get();
+		if(!$existingArticle->isEmpty()){
+			return 'exists';
+		}
+		else {
+			$article->nameURI = $request['nameURI'];
+			$article->isDeleted = 0;
+			$article->userID = $request['userID'];
+			
+			if($article->save()){
+				return $article->id;
+			}
 		}
 		return 'error';
     }
