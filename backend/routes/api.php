@@ -41,3 +41,7 @@ Route::post('/vote', function(Request $request){
 	
 	return 'thanks';
 });
+
+Route::resource('article.tags', 'ArticleTagController', [
+				'article'=>'articleId', 'tagId'=>'atID'
+]);
