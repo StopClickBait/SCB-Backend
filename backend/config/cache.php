@@ -30,6 +30,16 @@ return [
 
     'stores' => [
 
+		'file' => [
+			'driver' => 'file',
+			'path' => env('CACHE_PATH', storage_path('framework/cache/data')),
+		],
+		
+		'array' => [
+			'driver' => 'array',
+		],
+	
+		/*
         'apc' => [
             'driver' => 'apc',
         ],
@@ -42,11 +52,6 @@ return [
             'driver' => 'database',
             'table' => 'cache',
             'connection' => null,
-        ],
-
-        'file' => [
-            'driver' => 'file',
-            'path' => storage_path('framework/cache/data'),
         ],
 
         'memcached' => [
@@ -72,7 +77,7 @@ return [
             'driver' => 'redis',
             'connection' => 'default',
         ],
-
+		*/
     ],
 
     /*
