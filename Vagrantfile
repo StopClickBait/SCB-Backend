@@ -21,7 +21,9 @@ Vagrant.configure("2") do |config|
 	config.vm.provision :shell, :path => "./vagrant/bin/install_puppet_jessie.sh"
 	
 	# then we need to install some extra puppet modules
-	config.vm.provision :shell, :inline => "puppet module install --environment=dev puppetlabs/apt"
+	config.vm.provision :shell, :inline => "puppet module install --environment=dev --version 2.4.0 puppetlabs/apt"
+	# the apt and postgresql modules have conflicting version requirements for the 
+	config.vm.provision :shell, :inline => "puppet module install --environment=dev puppetlabs/postgresql"
 	
 	# use "puppet apply" to handle more complicated provisioning
 	config.vm.provision "puppet" do |puppet|

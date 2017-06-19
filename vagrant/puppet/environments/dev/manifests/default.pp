@@ -2,6 +2,14 @@ include apt
 
 node default {
 
+	# install and configure postgresql
+	class { 'postgresql::server': }
+	
+	postgresql::server::db { 'stopclickbait':
+		user     => 'stopclickbait',
+		password => postgresql_password('stopclickbait', 'UAFq2tQ07cVbvAz4'),
+	}
+
 	# prerequisites
 	package { [
 		'apt-transport-https',
@@ -65,7 +73,8 @@ node default {
 	package { [
 		'php7.1-fpm',
 		'php7.1-mbstring',
-		'php7.1-xml'
+		'php7.1-xml',
+		'php7.1-pgsql'
 	]:
 		ensure	=> latest,
 		require	=> [
@@ -152,23 +161,94 @@ node default {
 	]: 
 		ensure	=> directory,
 		owner	=> 'www-data',
-		group	=> 'www-data',
+		group	=> 'vagrant',
+		mode	=> '2775',
+	}
+	
+	# laravel is too stupid to just create the directories it needs, so we have to do it instead
+	file { [
+		'/var/laravel/logs',
+		'/var/laravel/app',
+		'/var/laravel/framework'
+	]: 
+		ensure	=> directory,
+		owner	=> 'www-data',
+		group	=> 'vagrant',
+		mode	=> '2775',
+		require => File['/var/laravel']
+	}
+	
+	file { [
+		'/var/laravel/framework/cache',
+		'/var/laravel/framework/sessions',
+		'/var/laravel/framework/testing',
+		'/var/laravel/framework/views',
+	]: 
+		ensure	=> directory,
+		owner	=> 'www-data',
+		group	=> 'vagrant',
+		mode	=> '2775',
+		require => File['/var/laravel/framework']
+	}
+	
+	file { [
+		'/var/laravel/app/public'
+	]: 
+		ensure	=> directory,
+		owner	=> 'www-data',
+		group	=> 'vagrant',
+		mode	=> '2775',
+		require => File['/var/laravel/app']
 	}
 	
 	# copy the laravel env file into a separate location
-	exec { 'move .env':
-		# puppet exec doesn't play nice with shell builtins, so we have to cheat
-		command => '/bin/bash -c "cp /var/www/scb/.env.example /etc/laravel/.env"',
-		creates	=> '/etc/laravel/.env',
+	file { '/etc/laravel/.env':
+		ensure	=> present,
+		source	=> '/vagrant/laravel/dev.env',
 		require => File['/etc/laravel']
 	}
 	
-	# make sure the env file is editable by our vagrant user
-	file { '/etc/laravel/.env':
-		ensure	=> present,
-		owner	=> 'vagrant',
-		group	=> 'vagrant',
-		mode	=> '0644'
+	# set up the database
+	exec { 'artisan migrate:install':
+		# sets up the migration table and creates a marker file to prevent re-running it
+		command => '/usr/bin/php /var/www/scb/artisan migrate:install && touch /var/laravel/migrate-installed',
+		creates	=> '/var/laravel/migrate-installed', 
+		require	=> [
+			File['/var/laravel'],
+			Exec['install app dependencies'],
+			Postgresql::Server::Db['stopclickbait']
+		]
+	}
+	
+	exec { 'artisan migrate':
+		# applies defined migrations to make db ready for use
+		command => '/usr/bin/php /var/www/scb/artisan migrate',
+		require	=> Exec['artisan migrate:install']
+	}
+	
+	# clean out the caches
+	exec { 'artisan cache:clear':
+		command => '/usr/bin/php /var/www/scb/artisan cache:clear',
+		require	=> [
+			File['/var/laravel/framework/cache'],
+			Exec['install app dependencies']
+		]
+	}
+	
+	exec { 'artisan view:clear':
+		command => '/usr/bin/php /var/www/scb/artisan view:clear',
+		require	=> [
+			File['/var/laravel/framework/views'],
+			Exec['install app dependencies']
+		]
+	}
+	
+	exec { 'artisan config:clear':
+		command => '/usr/bin/php /var/www/scb/artisan config:clear',
+		require	=> [
+			File['/var/laravel/framework/cache'],
+			Exec['install app dependencies']
+		]
 	}
 	
 	# define the order of operations for installing and launching nginx
