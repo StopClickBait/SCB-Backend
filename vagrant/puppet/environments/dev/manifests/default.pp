@@ -8,11 +8,22 @@ node default {
 	}
 
 	# install and configure postgresql
-	class { 'postgresql::server': }
+	class { 'postgresql::server': 
+		listen_addresses	=> '*'
+	}
 	
 	postgresql::server::db { 'stopclickbait':
 		user     => 'stopclickbait',
 		password => postgresql_password('stopclickbait', 'UAFq2tQ07cVbvAz4'),
+	}
+	
+	postgresql::server::pg_hba_rule { 'allow developer to access local db':
+		description => "Open up PostgreSQL for access from 192.168.123.1",
+		type        => 'host',
+		database    => 'stopclickbait',
+		user        => 'stopclickbait',
+		address     => '192.168.123.1/32',
+		auth_method => 'md5',
 	}
 
 	# prerequisites
