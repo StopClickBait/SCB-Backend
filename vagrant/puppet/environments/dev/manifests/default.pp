@@ -2,12 +2,28 @@ include apt
 
 node default {
 
+	# make sure we're running the latest version of the puppet agent
+	package { 'puppet-agent':
+		ensure	=> latest
+	}
+
 	# install and configure postgresql
-	class { 'postgresql::server': }
+	class { 'postgresql::server': 
+		listen_addresses	=> '*'
+	}
 	
 	postgresql::server::db { 'stopclickbait':
 		user     => 'stopclickbait',
 		password => postgresql_password('stopclickbait', 'UAFq2tQ07cVbvAz4'),
+	}
+	
+	postgresql::server::pg_hba_rule { 'allow developer to access local db':
+		description => "Open up PostgreSQL for access from 192.168.123.1",
+		type        => 'host',
+		database    => 'stopclickbait',
+		user        => 'stopclickbait',
+		address     => '192.168.123.1/32',
+		auth_method => 'md5',
 	}
 
 	# prerequisites
@@ -146,12 +162,21 @@ node default {
 	}
 	
 	# install app dependencies
-	exec { 'install app dependencies':
-		# puppet exec doesn't play nice with shell builtins, so we have to cheat
-		command => '/bin/bash -c "cd /var/www/scb && /usr/local/bin/composer install"',
+	exec { 'composer install':
+		# we want this to run as the vagrant user rather than root to preserve file ownership
+		command => '/usr/bin/sudo -u vagrant bash -c "cd /var/www/scb && /usr/local/bin/composer install"',
 		environment	=> 'HOME=/home/vagrant', # required by composer
-		creates	=> '/var/www/scb/backend/vendor',
+		creates	=> '/var/www/scb/vendor',
 		require => File['/home/vagrant/.composer']
+	}
+	
+	# update app dependencies
+	exec { 'composer update':
+		command => '/usr/bin/sudo -u vagrant bash -c "cd /var/www/scb && /usr/local/bin/composer update"',
+		environment	=> 'HOME=/home/vagrant', # required by composer
+		require => File['/home/vagrant/.composer'],
+		# only run this if the vendor folder was created by composer install
+		onlyif	=> '/usr/bin/test -d /var/www/scb/vendor'
 	}
 	
 	# laravel keeps logs, configs, and caches with the code by default, so let's separate it out
@@ -201,6 +226,15 @@ node default {
 		require => File['/var/laravel/app']
 	}
 	
+	# permissions on the log file can get jacked up, so make sure it's set to something useable
+	#file { '/var/laravel/logs/laravel.log': 
+	#	ensure	=> file,
+	#	owner	=> 'www-data',
+	#	group	=> 'vagrant',
+	#	mode	=> '0664',
+	#	require => File['/var/laravel/logs']
+	#}
+	
 	# copy the laravel env file into a separate location
 	file { '/etc/laravel/.env':
 		ensure	=> present,
@@ -215,7 +249,7 @@ node default {
 		creates	=> '/var/laravel/migrate-installed', 
 		require	=> [
 			File['/var/laravel'],
-			Exec['install app dependencies'],
+			Exec['composer install'],
 			Postgresql::Server::Db['stopclickbait']
 		]
 	}
@@ -231,7 +265,7 @@ node default {
 		command => '/usr/bin/php /var/www/scb/artisan cache:clear',
 		require	=> [
 			File['/var/laravel/framework/cache'],
-			Exec['install app dependencies']
+			Exec['composer install']
 		]
 	}
 	
@@ -239,7 +273,7 @@ node default {
 		command => '/usr/bin/php /var/www/scb/artisan view:clear',
 		require	=> [
 			File['/var/laravel/framework/views'],
-			Exec['install app dependencies']
+			Exec['composer install']
 		]
 	}
 	
@@ -247,7 +281,7 @@ node default {
 		command => '/usr/bin/php /var/www/scb/artisan config:clear',
 		require	=> [
 			File['/var/laravel/framework/cache'],
-			Exec['install app dependencies']
+			Exec['composer install']
 		]
 	}
 	
