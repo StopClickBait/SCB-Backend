@@ -7,7 +7,7 @@ Backend
 
 # API Routes
 The following routes have to do with retreiving articles. All are working as specified as of 6/25/17, tested with Postman.
-Note that scb is simply what I have for the local server in the hosts file. Substitute the IP address or whatever mapping you have for teh local server during dev. By default, that IP address is `192.168.123.10`. 
+Note that scb is simply what I have for the local server in the hosts file. Substitute the IP address or whatever mapping you have for the local server during dev. By default, that IP address is `192.168.123.10`. 
 
 | Verb | Route | Result |
 | ------ | ------ | ------ |
