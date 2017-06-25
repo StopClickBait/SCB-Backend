@@ -28,8 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
-        return 'create not working yet';
+        return 'Create not implemented for the API.';
     }
 
     /**
@@ -38,25 +37,24 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
-     //// RETURNS 500 SERVER ERROR
     public function store(Request $request)
     {
-        // $user = new User();
-		// $existingUser = User::where('email', $request['emai']);
-		// if(!$existingUser->isEmpty()){
-		// 	return 'exists';
-		// }
-		// else {
-		// 	$user->name = $request['name'];
-		// 	$user->email = $request['email'];
-        //     $user->password = $request['password'];
-		// 	if($user->save()){
-		// 		return $user->id;
-		// 	}
-		// }
-		// return 'error';
-        return 'store not working properly';
+        $user = new User();
+
+		$existingUser = User::where('email', $request['email'])
+            -> get();
+		if(!$existingUser->isEmpty()){
+			return 'exists';
+		}
+		else {
+			$user->name = $request['name'];
+			$user->email = $request['email'];
+            $user->password = $request['password'];
+			if($user->save()){
+				return $user;
+			}
+		}
+		return 'error';
     }
 
     /**
@@ -78,21 +76,32 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
-        return 'edit not implemented';
+        return 'edit not implemented for the API';
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
-        return 'update not implemented';
+        if($request['email']) {
+            $user -> email = $request['email'];
+        }
+        if($request['password']) {
+            $user -> password = $request['password'];
+        }
+        if($request['name']) {
+            $user -> name = $request['name'];
+        }
+        if($user->save())
+        {
+            return $user;
+        }
+        return 'error';
     }
 
     /**
@@ -103,7 +112,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Delete posts, or assign to someone else.
+        // Remove article assignments... do we need this?
+        // Delete user.
         return 'destroy not implemented';
     }
 
