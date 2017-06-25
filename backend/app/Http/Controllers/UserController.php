@@ -120,7 +120,8 @@ class UserController extends Controller
 
     public function ArticleUsers(Article $article)
     {
-        $users = $article -> users;
-        return $users;
+        // $users = $article -> users;
+        // return $users;
+        return 'not implemented';
     }
 }
