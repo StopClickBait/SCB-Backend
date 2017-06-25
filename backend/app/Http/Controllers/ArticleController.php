@@ -134,7 +134,9 @@ class ArticleController extends Controller
 
     public function UserArticles(User $user)
     {
-        $articles = $user->articles;
-        return $articles;
+        $article = Article::where("userID", $user -> id) -> get();
+        return $article;
+        // $articles = $user->articles;
+        // return $articles;
     }
 }
