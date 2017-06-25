@@ -7,6 +7,7 @@ Backend
 
 # API Routes
 The following routes have to do with retreiving articles. All are working as specified as of 6/25/17, tested with Postman.
+
 | Verb | Route | Result |
 | ------ | ------ | ------ |
 |GET|`scb/api/articles`|Returns all of the existing articles.|
