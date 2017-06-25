@@ -13,4 +13,9 @@ class Article extends Model
         return $this->belongsToMany('App\User', 'user_articles', 'articleID', 'userID')
                     ->withTimestamps();
     }
+
+    public function posts()
+    {
+        return $this->hasMany('App\Post');
+    }
 }
