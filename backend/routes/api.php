@@ -13,9 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:api');
+
+Route::get('/users/{user}/articles', 'ArticleController@UserArticles');
+
+Route::resource('users', 'UserController');
 
 Route::get('/answers/{articleId}', function ($articleId) {
     $answers = array (1=>'asd',2=>'some answer',3=>'wow article');
@@ -30,6 +34,9 @@ Route::get('/answers/{answerId}/votes', function ($answerId) {
 });
 
 Route::resource('articles', 'ArticleController');
+
+Route::get('/articles/{article}/users', 'UserController@ArticleUsers');
+
 
 Route::post('/vote', function(Request $request){
 	$answer = $request->input('answerId');

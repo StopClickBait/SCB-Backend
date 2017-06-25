@@ -6,5 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    //
+    protected $guarded = array('id');
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User', 'user_articles', 'articleID', 'userID')
+                    ->withTimestamps();
+    }
 }

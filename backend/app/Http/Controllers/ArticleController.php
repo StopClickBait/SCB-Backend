@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use App\Article;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /*
 	GET	/articles	index	articles.index
 	GET	/articles/create	create	articles.create
-	POST	/articles	store	articles.store
+	POST/articles	store	articles.store
 	GET	/articles/{article}	show	articles.show
 	GET	/articles/{article}/edit	edit	articles.edit
 	PUT/PATCH	/articles/{article}	update	articles.update
@@ -47,27 +48,29 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    //// 500 SERVER ERROR:
     public function store(Request $request)
     {
-        $article = new Article();
+        // $article = new Article();
 		
-		$existingArticle = DB::table('articles')
-			->where('nameURI', $request['nameURI'])
-			->where('isDeleted',0)
-			->get();
-		if(!$existingArticle->isEmpty()){
-			return 'exists';
-		}
-		else {
-			$article->nameURI = $request['nameURI'];
-			$article->isDeleted = 0;
-			$article->userID = $request['userID'];
+		// $existingArticle = DB::table('articles')
+		// 	->where('nameURI', $request['nameURI'])
+		// 	->where('isDeleted',0)
+		// 	->get();
+		// if(!$existingArticle->isEmpty()){
+		// 	return 'exists';
+		// }
+		// else {
+		// 	$article->nameURI = $request['nameURI'];
+		// 	$article->isDeleted = 0;
+		// 	$article->userID = $request['userID'];
 			
-			if($article->save()){
-				return $article->id;
-			}
-		}
-		return 'error';
+		// 	if($article->save()){
+		// 		return $article->id;
+		// 	}
+		// }
+		// return 'error';
+        return 'store not working properly';
     }
 
     /**
@@ -78,8 +81,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
-		return 'Show method not yet implemented';
+		return $article;
     }
 
     /**
@@ -90,7 +92,6 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
 		return 'Edit method not yet implemented';
     }
 
@@ -104,6 +105,7 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         //
+
 		return 'Update method not yet implemented';
     }
 
@@ -113,9 +115,16 @@ class ArticleController extends Controller
      * @param  \App\Article  $article
      * @return \Illuminate\Http\Response
      */
+     // ERRORS:
     public function destroy(Article $article)
     {
-        //
-		return 'Destroy method not yet implemented';
+        //return $article->delete();
+        return 'destroy not yet working';
+    }
+
+    public function UserArticles(User $user)
+    {
+        $articles = $user->articles;
+        return $articles;
     }
 }
