@@ -16,6 +16,6 @@ class Article extends Model
 
     public function posts()
     {
-        return $this->hasMany('App\Post');
+        return $this->hasMany('App\Post', 'article_id', 'id');
     }
 }

@@ -13,29 +13,19 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:api');
-
+// Information related to users:
 Route::get('/users/{user}/articles', 'ArticleController@UserArticles');
-
+Route::get('/users/{user}/posts', 'PostsController@UserPosts');
 Route::resource('users', 'UserController');
 
-Route::get('/answers/{articleId}', function ($articleId) {
-    $answers = array (1=>'asd',2=>'some answer',3=>'wow article');
+// Information related to posts:
+Route::get('/posts/{post}/votes', 'PostsController@Votes');
+Route::resource('posts', 'PostsController');
 
-    return json_encode($answers);
-});
-
-Route::get('/answers/{answerId}/votes', function ($answerId) {
-    $votes = 1000;
-	
-    return json_encode($votes); 
-});
-
-Route::resource('articles', 'ArticleController');
-
+// Information related to users:
 Route::get('/articles/{article}/users', 'UserController@ArticleUsers');
+Route::get('/articles/{article}/posts', 'PostsController@ArticlePosts');
+Route::resource('articles', 'ArticleController');
 
 
 Route::post('/vote', function(Request $request){
