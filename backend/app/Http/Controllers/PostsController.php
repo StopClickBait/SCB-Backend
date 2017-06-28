@@ -27,7 +27,7 @@ class PostsController extends Controller
     public function create()
     {
         //
-        return 'create not implemented';
+        return 'Not Implemented.';
     }
 
     /**
@@ -38,8 +38,17 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        return 'store not implemented';
+        $post = new Post();
+
+        $post->user_id = $request['user_id'];
+        $post->article_id = $request['article_id'];
+        $post->text = $request['text'];
+        $post->upvotes = 0;
+        $post->downvotes = 0;
+        if($post->save()){
+            return $post;
+        }
+		return 'error';
     }
 
     /**
@@ -62,7 +71,7 @@ class PostsController extends Controller
     public function edit($id)
     {
         //
-        return 'edit not implemented';
+        return 'Not Implemented.';
     }
 
     /**
@@ -72,10 +81,16 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
-        return 'update not implemented';
+        if($request['text']) {
+            $post -> text = $request['text'];
+        }
+        if($post->save())
+        {
+            return $post;
+        }
+        return 'error';
     }
 
     /**
@@ -87,14 +102,14 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
-        return 'destroy not implemented';
+        return 'destroy not yet implemented';
     }
 
     public function UserPosts(User $user)
     {
         // Not sure why the relationship isn't directly working:
         // return $user -> posts();
-        $posts = Post::where('user_id', $user -> id)->first();
+        $posts = Post::where('user_id', $user -> id)->get();
         return $posts;
     }
 
@@ -102,7 +117,7 @@ class PostsController extends Controller
     {
         // Not sure why the relationship isn't directly working:
         //return $article->posts();
-        $posts = Post::where('article_id', $article -> id)->first();
+        $posts = Post::where('article_id', $article -> id)->get();
         return $posts;
     }
 
@@ -110,5 +125,23 @@ class PostsController extends Controller
     public function Votes(Post $post)
     {
         return collect($post)->only(['id', 'upvotes', 'downvotes'])->all();
+    }
+
+    public function Upvote(Post $post)
+    {
+        $post -> upvotes += 1;
+        if($post->save())
+        {     
+            return $post->upvotes;
+        }
+    }
+
+    public function Downvote(Post $post)
+    {
+        $post -> downvotes += 1;
+        if($post -> save())
+        {
+            return $post -> downvotes;
+        }
     }
 }

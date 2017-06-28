@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return 'Create not implemented for the API.';
+        return 'Not Implemented.';
     }
 
     /**
@@ -76,7 +76,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return 'edit not implemented for the API';
+        return 'Not Implemented.';
     }
 
     /**
@@ -118,10 +118,9 @@ class UserController extends Controller
         return 'destroy not implemented';
     }
 
-    public function ArticleUsers(Article $article)
+    public function ArticleUser(Article $article)
     {
-        // $users = $article -> users;
-        // return $users;
-        return 'not implemented';
+        $user = User::where('id', $article -> userID)->first();
+        return $user;
     }
 }

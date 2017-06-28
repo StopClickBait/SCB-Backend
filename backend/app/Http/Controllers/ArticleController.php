@@ -38,7 +38,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-		return 'Create method not used in API.';
+		return 'Not Implemented.';
     }
 
     /**
@@ -87,7 +87,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-		return 'Edit method not implemented in API.';
+		return 'Not Implemented.';
     }
 
     /**
@@ -136,7 +136,5 @@ class ArticleController extends Controller
     {
         $article = Article::where("userID", $user -> id) -> get();
         return $article;
-        // $articles = $user->articles;
-        // return $articles;
     }
 }
