@@ -25,7 +25,7 @@ Route::put('/posts/{post}/downvote', 'PostsController@Downvote');
 Route::resource('posts', 'PostsController');
 
 // Information related to users:
-Route::get('/articles/{article}/users', 'UserController@ArticleUsers');
+Route::get('/articles/{article}/user', 'UserController@ArticleUser');
 Route::get('/articles/{article}/posts', 'PostsController@ArticlePosts');
 Route::resource('articles', 'ArticleController');
 

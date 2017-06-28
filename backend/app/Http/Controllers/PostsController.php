@@ -27,7 +27,7 @@ class PostsController extends Controller
     public function create()
     {
         //
-        return 'create not implemented';
+        return 'Not Implemented.';
     }
 
     /**
@@ -71,7 +71,7 @@ class PostsController extends Controller
     public function edit($id)
     {
         //
-        return 'edit not implemented';
+        return 'Not Implemented.';
     }
 
     /**
@@ -102,7 +102,7 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
-        return 'destroy not implemented';
+        return 'destroy not yet implemented';
     }
 
     public function UserPosts(User $user)

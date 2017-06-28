@@ -25,6 +25,7 @@ The following interact with users:
 | ------ | ------ | ------ |
 |GET|`scb/api/users`|Returns all of the existing users.|
 |GET|`scb/api/users/{user}`|Returns the user for which `{user}` is the id.|
+|GET|`scb/api/articles/{article}/user`|Returns the user who initially reported the `{article}`.|
 |POST|`scb/api/users`|Creates a new user in the database and returns it. Specify `email`, `name`, and `password` as parameters.|
 |PUT/PATCH|`scb/api/users/{user}`|Updates the specified user, where `{user}` is the id of the user. Specify `email`, `name`, `password` or all as parameters. It will return the updated user.|
 
