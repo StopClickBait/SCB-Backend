@@ -23,7 +23,20 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected $guarded = array('id');
+
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function articles()
+    {
+        return $this->belongsToMany('App\Article', 'user_articles', 'userID', 'articleID')
+                    ->withTimestamps();
+    }
+
+    public function posts()
+    {
+        return $this->hasMany('App\Post');
+    }
 }
