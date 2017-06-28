@@ -20,6 +20,8 @@ Route::resource('users', 'UserController');
 
 // Information related to posts:
 Route::get('/posts/{post}/votes', 'PostsController@Votes');
+Route::put('/posts/{post}/upvote', 'PostsController@Upvote');
+Route::put('/posts/{post}/downvote', 'PostsController@Downvote');
 Route::resource('posts', 'PostsController');
 
 // Information related to users:
